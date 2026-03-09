@@ -5,14 +5,12 @@ import plotly.graph_objects as go
 import io
 import random
 import datetime
-import math
 
 st.set_page_config(page_title="AMAPRO AI QUANTUM + ADVANCED SEASONALITY & HOLIDAY", layout="wide")
 
 st.title("🚀 AMAPRO AI QUANTUM PRODUCT HUNTER + ADVANCED SEASONALITY & HOLIDAY")
 st.markdown("**Only $40+ • ZERO saturation • 15 Categories • Advanced Models + 2026 Holiday Analysis + Pro Forecast Visuals**")
 
-# ===================== CURRENT DATE & 2026 HOLIDAYS =====================
 current_date = datetime.date(2026, 3, 9)
 current_month = current_date.month
 
@@ -80,7 +78,7 @@ if 'df' in locals():
         with col2: st.session_state[f"saturation_{asin}"] = st.number_input(f"Saturation $ {asin} (MUST = 0)", value=0, key=f"s{idx}")
         with col3: st.session_state[f"new_seller_pct_{asin}"] = st.slider(f"New Seller % {asin}", 0, 100, 55, key=f"n{idx}")
 
-# ===================== SCORING =====================
+# Scoring functions (same as before)
 def demand_score(revenue): 
     if revenue > 50000: return 25
     elif revenue > 25000: return 20
@@ -145,7 +143,6 @@ def calculate_total_score(row):
 
     return min(score, 100), " | ".join(reasons)
 
-# Apply scores to uploaded products
 if 'df' in locals():
     scores, reasons_list = [], []
     for _, row in df.iterrows():
@@ -237,7 +234,6 @@ with tab4:
             season_type = random.choice(["Evergreen", "Moderate Seasonal", "Strong Seasonal", "Holiday Spike"])
             peak_months = random.choice(["Year-Round", "Mar-May", "May-Aug", "Nov-Dec", "Jan-Mar"])
 
-            # Holiday analysis
             next_holiday = "Easter"
             holiday_impact = 0
             for name, data in holiday_calendar.items():
@@ -248,9 +244,7 @@ with tab4:
                     break
             holiday_impact_score = round(holiday_impact * 30, 1)
 
-            # Forecast
-            base = revenue
-            forecasted_6m = round(base * 6 * (1 + holiday_impact/2), 0)
+            forecasted_6m = round(revenue * 6 * (1 + holiday_impact/2), 0)
             launch_window = "Launch NOW — Major Holiday Spike Ahead!" if holiday_impact > 2.0 else "Launch in next 30 days" if seasonality_score >= 7 else "Anytime (Evergreen)"
 
             fake_asin = f"B0{random.randint(10000000,99999999)}"
@@ -307,7 +301,6 @@ with tab5:
         fig_forecast.update_layout(title=f"Refined 6-Month Forecast — {selected_product}")
         st.plotly_chart(fig_forecast, use_container_width=True)
 
-        st.success("✅ Everything working! Advanced models + holiday analysis active.")
-
-else:
-    st.info("👆 Generate ideas or upload CSV to unlock the dashboard")
+        st.success("✅ Advanced models + holiday analysis active!")
+    else:
+        st.info("👆 Generate ideas or upload CSV to unlock the dashboard")
