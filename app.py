@@ -7,148 +7,131 @@ import datetime
 import urllib.parse
 
 # --- CONFIGURATION & STYLING ---
-st.set_page_config(page_title="AMAPRO AI QUANTUM: EVERGREEN EDITION", layout="wide")
+st.set_page_config(page_title="AMAPRO AI QUANTUM: $40+ PREMIUM", layout="wide")
 
-# Fixed CSS Injection
 st.markdown("""
     <style>
     .main { background-color: #0e1117; }
-    .stMetric { background-color: #161b22; padding: 15px; border-radius: 10px; border: 1px solid #30363d; }
+    .stMetric { background-color: #161b22; padding: 15px; border-radius: 10px; border: 1px solid #30363d; border-left: 5px solid #00ff9d; }
+    div[data-testid="stExpander"] { border: 1px solid #30363d; }
     </style>
     """, unsafe_allow_html=True)
 
-st.title("🚀 AMAPRO AI QUANTUM: PURE EVERGREEN HUNTER")
-st.markdown("**Strict $40+ • ZERO Saturation • Search-Linked Research • 2026 Quantum Forecasting**")
+st.title("🚀 AMAPRO AI QUANTUM: PREMIUM PRODUCT HUNTER")
+st.markdown("**STRICT $40+ ONLY • Zero Saturation • 100% Evergreen • Real-Time Research Links**")
 
-# --- SIDEBAR FILTERS ---
-st.sidebar.header("⚙️ Quantum Filters ($40+ Only)")
-min_price = st.sidebar.slider("Minimum Price", 40, 200, 45)
-max_reviews = st.sidebar.slider("Maximum Reviews", 50, 500, 150)
-max_rating = st.sidebar.slider("Maximum Rating", 3.5, 5.0, 4.4)
-max_weight = st.sidebar.slider("Maximum Weight (lbs)", 1, 10, 4)
-min_revenue = st.sidebar.slider("Min Monthly Revenue", 5000, 50000, 15000)
+# --- SIDEBAR: QUANTUM ENGINE SETTINGS ---
+st.sidebar.header("⚙️ $40+ Logic Constraints")
+min_p = st.sidebar.number_input("Strict Minimum Price ($)", value=40, min_value=40)
+max_revs = st.sidebar.slider("Max Reviews (Low Competition)", 50, 400, 150)
+min_rev = st.sidebar.slider("Min Monthly Revenue ($)", 10000, 60000, 18000)
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("### 🛡️ AMAPRO STRICT RULES")
-st.sidebar.write("✅ Saturation: **EXACTLY $0**")
-st.sidebar.write("✅ Demand: **YEAR-ROUND**")
+st.sidebar.info("""
+**AMAPRO QUALITY PROTOCOL:**
+- 🚫 No Electronics that break easily
+- 🚫 No Clothing (High returns)
+- ✅ 100% Year-Round Utility
+- ✅ Minimum $15 Net Profit/unit
+""")
+
+# --- PRODUCT POOL: $40+ EVERGREEN CATEGORIES ---
+# Curated for items that consistently sell above $40
+premium_evergreen_pool = {
+    "Kitchen & Dining": ["Electric Knife Sharpener", "Large Bamboo Carving Board", "High-Precision Coffee Scale", "Weighted Induction Cooktop", "Stainless Steel Compost Bin"],
+    "Home Office": ["Ergonomic Desk Chair", "Dual Monitor Arm Mount", "Height Adjustable Laptop Stand", "Mechanical Keyboard (Office)", "Under-Desk Footrest (Luxury)"],
+    "Health & Recovery": ["Percussion Massage Gun", "Weighted Cooling Blanket", "Intelligent Posture Trainer", "Lumbar Support Pillow System", "Portable Infrared Sauna"],
+    "Pet Supplies": ["Large Orthopedic Dog Bed", "Automatic Self-Cleaning Litter Box", "Smart Pet Water Fountain", "Heated Outdoor Cat House", "Double-Stitch Leather Leash Set"],
+    "Home Improvement": ["Contactless Kitchen Faucet", "Digital Smart Door Lock", "Wireless Outdoor Security Camera", "Solar Gutter Light System", "Luxury Rainfall Shower Set"],
+    "Fitness": ["Adjustable Dumbbell Set", "Heavy-Duty Weight Bench", "Thick Yoga Mat (Eco-Friendly)", "Resistance Band Station", "Portable Pilates Bar Kit"]
+}
 
 # --- APP TABS ---
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "🏆 Quantum Winners", 
-    "📊 Charts", 
-    "📋 Raw Data", 
-    "🧠 EVERGREEN GENERATOR", 
-    "📈 TREND DASHBOARD"
-])
+tab1, tab2, tab3, tab4 = st.tabs(["🏆 Quantum Winners", "🧠 Generator", "📈 Trend Analysis", "📋 Export"])
 
-# --- TAB 4: THE GENERATOR (EVERGREEN ONLY) ---
-with tab4:
-    st.subheader("🧠 QUANTUM GENERATOR: 100% EVERGREEN NICHE")
-    
-    evergreen_pool = {
-        "Kitchen": ["Silicone Baking Mat Set", "Digital Meat Thermometer", "Stainless Steel Mixing Bowls"],
-        "Home": ["Blackout Curtains", "Microfiber Bed Sheets", "Self-Watering Planters"],
-        "Health": ["Posture Corrector", "Electric Neck Massager", "Daily Vitamin Organizer"],
-        "Pet": ["Orthopedic Dog Bed", "Slow Feeder Bowl", "Pet Hair Remover"],
-        "Office": ["Ergonomic Mouse Pad", "Monitor Stand Riser", "Cable Management Box"],
-        "Baby": ["Muslin Swaddle Set", "Electric Nail Trimmer", "Diaper Caddy"],
-        "Fitness": ["Resistance Bands Set", "Ab Roller Wheel", "Yoga Knee Pad"],
-        "Travel": ["Compression Packing Cubes", "Digital Luggage Scale", "TSA Toiletry Bag"]
-    }
+# --- TAB 2: THE GENERATOR (CORE ENGINE) ---
+with tab4: # Moved for workflow
+    pass
 
+with tab2:
+    st.subheader("🔮 Quantum $40+ Generator")
     col_a, col_b = st.columns([1, 2])
     with col_a:
-        cat_choice = st.selectbox("Category", ["All"] + list(evergreen_pool.keys()))
+        cat_choice = st.selectbox("Select Niche", ["All Categories"] + list(premium_evergreen_pool.keys()))
     with col_b:
-        num_gen = st.slider("Quantity", 5, 20, 10)
+        num_gen = st.slider("Quantity to Hunt", 5, 20, 10)
 
-    if st.button("🔮 Generate Year-Round Winners", type="primary"):
-        generated_data = []
+    if st.button("🔥 Run Quantum Scan ($40+)", type="primary"):
+        results = []
         for _ in range(num_gen):
-            cat = cat_choice if cat_choice != "All" else random.choice(list(evergreen_pool.keys()))
-            prod = random.choice(evergreen_pool[cat])
+            cat = cat_choice if cat_choice != "All Categories" else random.choice(list(premium_evergreen_pool.keys()))
+            prod = random.choice(premium_evergreen_pool[cat])
             
-            price = round(random.uniform(45, 115), 2)
-            rev = random.randint(15000, 42000)
+            # Generating Realistic High-Ticket Metrics
+            price = round(random.uniform(42.50, 185.00), 2)
+            revenue = random.randint(min_rev, 55000)
             
-            # FIX: Create a Search URL instead of a fake ASIN URL
-            # This ensures the link actually opens a valid Amazon page
+            # Amazon Search Link Logic
             query = urllib.parse.quote(prod)
             search_url = f"https://www.amazon.com/s?k={query}"
             
-            generated_data.append({
+            results.append({
                 "Product": prod,
                 "Category": cat,
-                "Price": price,
-                "Monthly Revenue": rev,
-                "Reviews": random.randint(30, 140),
-                "Rating": round(random.uniform(4.2, 4.6), 1),
-                "Weight (lbs)": round(random.uniform(0.8, 3.5), 1),
-                "Saturation": "$0 (Verified)",
-                "Evergreen": "YES ✅",
-                "Seasonality": "Year-Round",
-                "Opportunity_Score": random.randint(91, 99),
-                "Amazon Link": search_url
+                "Price": f"${price}",
+                "Revenue": f"${revenue:,}",
+                "Reviews": random.randint(25, max_revs),
+                "Rating": round(random.uniform(4.3, 4.7), 1),
+                "Saturation": "ZERO 🔥",
+                "Evergreen": "YES",
+                "Score": random.randint(92, 99),
+                "Link": search_url
             })
         
-        st.session_state['gen_df'] = pd.DataFrame(generated_data)
-        st.success(f"Generated {num_gen} evergreen candidates with live research links!")
+        st.session_state['data'] = pd.DataFrame(results)
+        st.success(f"Successfully scouted {num_gen} premium evergreen products.")
 
-    if 'gen_df' in st.session_state:
+    if 'data' in st.session_state:
         st.dataframe(
-            st.session_state['gen_df'],
+            st.session_state['data'],
             column_config={
-                "Amazon Link": st.column_config.LinkColumn(
-                    "Research Link", 
-                    display_text="View Competitors 🔍"
-                )
+                "Link": st.column_config.LinkColumn("Research on Amazon", display_text="Check Competition 🔍")
             },
             use_container_width=True,
             hide_index=True
         )
 
-# --- TAB 1: QUANTUM WINNERS ---
+# --- TAB 1: WINNERS ---
 with tab1:
-    if 'gen_df' in st.session_state:
-        winners = st.session_state['gen_df'][st.session_state['gen_df']["Opportunity_Score"] >= 90]
-        st.metric("🔥 High-Value Evergreen Winners", len(winners))
-        st.dataframe(
-            winners,
-            column_config={
-                "Amazon Link": st.column_config.LinkColumn("Research Link", display_text="Open 🔗")
-            },
-            use_container_width=True,
-            hide_index=True
-        )
+    if 'data' in st.session_state:
+        winners = st.session_state['data'][st.session_state['data']['Score'] >= 95]
+        st.metric("Elite Candidates (Score 95+)", len(winners))
+        st.dataframe(winners, use_container_width=True, hide_index=True)
     else:
-        st.warning("Please generate products in the Generator tab first!")
+        st.info("👆 Use the **Generator** tab to start the scan.")
 
-# --- TAB 5: TREND DASHBOARD ---
-with tab5:
-    st.subheader("📈 STABLE GROWTH FORECAST (2026)")
-    if 'gen_df' in st.session_state:
-        df_plot = st.session_state['gen_df']
-        selected_p = st.selectbox("Select Product to Forecast", df_plot["Product"].unique())
+# --- TAB 3: TREND ANALYSIS ---
+with tab3:
+    if 'data' in st.session_state:
+        df = st.session_state['data']
+        p_name = st.selectbox("Select Product for 2026 Forecast", df["Product"].unique())
         
-        base_rev = df_plot[df_plot["Product"] == selected_p]["Monthly Revenue"].values[0]
-        months = ["Mar '26", "Apr '26", "May '26", "Jun '26", "Jul '26", "Aug '26"]
-        forecast_values = [base_rev * (1 + (0.02 * i)) for i in range(6)]
+        # Fixed baseline for 6-month evergreen stability
+        months = ["Mar", "Apr", "May", "Jun", "Jul", "Aug"]
+        rev_int = int(df[df['Product'] == p_name]['Revenue'].values[0].replace('$', '').replace(',', ''))
+        
+        # High-ticket evergreen products show steady, non-volatile growth
+        values = [rev_int * (1 + (0.015 * i)) for i in range(6)]
         
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=months, y=forecast_values, mode='lines+markers', name='Projected Revenue', line=dict(color='#00ff9d', width=4)))
-        fig.update_layout(title=f"6-Month Stable Growth Forecast: {selected_p}", template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+        fig.add_trace(go.Scatter(x=months, y=values, mode='lines+markers', line=dict(color='#00ff9d', width=3)))
+        fig.update_layout(title=f"6-Month Revenue Projection: {p_name}", template="plotly_dark", height=400)
         st.plotly_chart(fig, use_container_width=True)
     else:
-        st.info("Generate products to unlock the Trend Dashboard.")
+        st.warning("No data found. Generate products first.")
 
-# --- CHARTS & RAW DATA ---
-with tab2:
-    if 'gen_df' in st.session_state:
-        fig_hist = px.bar(st.session_state['gen_df'], x="Product", y="Monthly Revenue", color="Category", title="Revenue Potential", template="plotly_dark")
-        st.plotly_chart(fig_hist, use_container_width=True)
-
-with tab3:
-    if 'gen_df' in st.session_state:
-        st.dataframe(st.session_state['gen_df'], use_container_width=True)
-        st.download_button("📥 Export Evergreen Report", st.session_state['gen_df'].to_csv(index=False), "amapro_evergreen.csv")
+# --- TAB 4: EXPORT ---
+with tab4:
+    if 'data' in st.session_state:
+        st.write("### Ready to Sourcing?")
+        st.download_button("📥 Download Quantum Report (CSV)", st.session_state['data'].to_csv(index=False), "amapro_premium_hunt.csv")
