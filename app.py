@@ -4,11 +4,12 @@ import plotly.express as px
 import plotly.graph_objects as go
 import random
 import datetime
+import urllib.parse
 
 # --- CONFIGURATION & STYLING ---
 st.set_page_config(page_title="AMAPRO AI QUANTUM: EVERGREEN EDITION", layout="wide")
 
-# Fixed the TypeError here by using the correct parameter: unsafe_allow_html=True
+# Fixed CSS Injection
 st.markdown("""
     <style>
     .main { background-color: #0e1117; }
@@ -17,10 +18,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 st.title("🚀 AMAPRO AI QUANTUM: PURE EVERGREEN HUNTER")
-st.markdown("**Strict $40+ • ZERO Saturation • Year-Round Demand • 2026 Quantum Forecasting**")
-
-# --- GLOBAL DATA ---
-current_date = datetime.date(2026, 3, 9)
+st.markdown("**Strict $40+ • ZERO Saturation • Search-Linked Research • 2026 Quantum Forecasting**")
 
 # --- SIDEBAR FILTERS ---
 st.sidebar.header("⚙️ Quantum Filters ($40+ Only)")
@@ -73,8 +71,11 @@ with tab4:
             
             price = round(random.uniform(45, 115), 2)
             rev = random.randint(15000, 42000)
-            # Fixed Amazon link generation
-            asin = f"B0{random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ')}{random.randint(1000000, 9999999)}"
+            
+            # FIX: Create a Search URL instead of a fake ASIN URL
+            # This ensures the link actually opens a valid Amazon page
+            query = urllib.parse.quote(prod)
+            search_url = f"https://www.amazon.com/s?k={query}"
             
             generated_data.append({
                 "Product": prod,
@@ -88,16 +89,21 @@ with tab4:
                 "Evergreen": "YES ✅",
                 "Seasonality": "Year-Round",
                 "Opportunity_Score": random.randint(91, 99),
-                "Amazon Link": f"https://www.amazon.com/dp/{asin}"
+                "Amazon Link": search_url
             })
         
         st.session_state['gen_df'] = pd.DataFrame(generated_data)
-        st.success(f"Generated {num_gen} evergreen candidates!")
+        st.success(f"Generated {num_gen} evergreen candidates with live research links!")
 
     if 'gen_df' in st.session_state:
         st.dataframe(
             st.session_state['gen_df'],
-            column_config={"Amazon Link": st.column_config.LinkColumn("View Product", display_text="Open on Amazon 🔗")},
+            column_config={
+                "Amazon Link": st.column_config.LinkColumn(
+                    "Research Link", 
+                    display_text="View Competitors 🔍"
+                )
+            },
             use_container_width=True,
             hide_index=True
         )
@@ -109,8 +115,11 @@ with tab1:
         st.metric("🔥 High-Value Evergreen Winners", len(winners))
         st.dataframe(
             winners,
-            column_config={"Amazon Link": st.column_config.LinkColumn("Link")},
-            use_container_width=True
+            column_config={
+                "Amazon Link": st.column_config.LinkColumn("Research Link", display_text="Open 🔗")
+            },
+            use_container_width=True,
+            hide_index=True
         )
     else:
         st.warning("Please generate products in the Generator tab first!")
@@ -128,14 +137,15 @@ with tab5:
         
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=months, y=forecast_values, mode='lines+markers', name='Projected Revenue', line=dict(color='#00ff9d', width=4)))
-        fig.update_layout(title=f"6-Month Stable Growth Forecast: {selected_p}", template="plotly_dark")
+        fig.update_layout(title=f"6-Month Stable Growth Forecast: {selected_p}", template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("Generate products to unlock the Trend Dashboard.")
 
+# --- CHARTS & RAW DATA ---
 with tab2:
     if 'gen_df' in st.session_state:
-        fig_hist = px.bar(st.session_state['gen_df'], x="Product", y="Monthly Revenue", color="Category", title="Revenue Potential")
+        fig_hist = px.bar(st.session_state['gen_df'], x="Product", y="Monthly Revenue", color="Category", title="Revenue Potential", template="plotly_dark")
         st.plotly_chart(fig_hist, use_container_width=True)
 
 with tab3:
