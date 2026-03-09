@@ -74,7 +74,6 @@ if 'df' in locals():
         with col2: st.session_state[f"saturation_{asin}"] = st.number_input(f"Saturation $ {asin} (MUST = 0)", value=0, key=f"s{idx}")
         with col3: st.session_state[f"new_seller_pct_{asin}"] = st.slider(f"New Seller % {asin}", 0, 100, 55, key=f"n{idx}")
 
-# Scoring functions (unchanged)
 def demand_score(revenue): 
     if revenue > 50000: return 25
     elif revenue > 25000: return 20
@@ -282,29 +281,38 @@ with tab5:
         with col1: st.metric("Avg Seasonality Score", f"{analysis_df['Seasonality Score'].mean():.1f}/10")
         with col2: st.metric("Avg Holiday Impact", f"{analysis_df['Holiday Impact Score'].mean():.1f}")
         with col3: st.metric("Total 6-Month Forecast", f"${analysis_df['Forecasted Next 6 Months'].sum():,}")
-        with col4: st.metric("Best Launch Window", analysis_df['Recommended Launch Window'].mode()[0])
+        with col4: st.metric("Best Launch Window", analysis_df['Recommended Launch Window'].mode()[0] if not analysis_df.empty else "N/A")
 
-        selected_product = st.selectbox("Select Product", analysis_df["Product"].unique())
-        prod = analysis_df[analysis_df["Product"] == selected_product].iloc[0]
-        
-        months = ["Mar", "Apr", "May", "Jun", "Jul", "Aug"]
-        base = prod["Monthly Revenue"]
-        forecast = [base * (1 + 0.08 * i) * (1.4 if "Strong" in prod["Seasonality Type"] else 1.2) for i in range(6)]
-        lower = [v * 0.85 for v in forecast]
-        upper = [v * 1.15 for v in forecast]
+        # SAFE PRODUCT SELECTBOX + FILTER
+        products = analysis_df["Product"].dropna().unique().tolist()
+        if products:
+            selected_product = st.selectbox("Select Product", products)
+            filtered = analysis_df[analysis_df["Product"] == selected_product]
+            if not filtered.empty:
+                prod = filtered.iloc[0]
+                
+                months = ["Mar", "Apr", "May", "Jun", "Jul", "Aug"]
+                base = prod["Monthly Revenue"]
+                forecast = [base * (1 + 0.08 * i) * (1.4 if "Strong" in prod["Seasonality Type"] else 1.2) for i in range(6)]
+                lower = [v * 0.85 for v in forecast]
+                upper = [v * 1.15 for v in forecast]
 
-        fig_forecast = go.Figure()
-        fig_forecast.add_trace(go.Scatter(x=months, y=forecast, mode='lines+markers', name='Forecast', line=dict(color='#00ff9d')))
-        fig_forecast.add_trace(go.Scatter(x=months, y=upper, mode='lines', line=dict(width=0), showlegend=False))
-        fig_forecast.add_trace(go.Scatter(x=months, y=lower, mode='lines', fill='tonexty', fillcolor='rgba(0,255,157,0.2)', line=dict(width=0), name='±15% Confidence'))
-        fig_forecast.update_layout(title=f"Refined 6-Month Forecast — {selected_product}")
-        st.plotly_chart(fig_forecast, use_container_width=True)
+                fig_forecast = go.Figure()
+                fig_forecast.add_trace(go.Scatter(x=months, y=forecast, mode='lines+markers', name='Forecast', line=dict(color='#00ff9d')))
+                fig_forecast.add_trace(go.Scatter(x=months, y=upper, mode='lines', line=dict(width=0), showlegend=False))
+                fig_forecast.add_trace(go.Scatter(x=months, y=lower, mode='lines', fill='tonexty', fillcolor='rgba(0,255,157,0.2)', line=dict(width=0), name='±15% Confidence'))
+                fig_forecast.update_layout(title=f"Refined 6-Month Forecast — {selected_product}")
+                st.plotly_chart(fig_forecast, use_container_width=True)
+            else:
+                st.warning("⚠️ No data found for this product")
+        else:
+            st.info("No products available yet")
 
         csv = analysis_df.to_csv(index=False).encode('utf-8')
         st.download_button("📥 Download Dashboard Results as CSV", csv, "amapro_dashboard_results.csv", "text/csv", use_container_width=True)
 
         st.success("✅ All download buttons active!")
     else:
-        st.info("👆 Go to the **🧠 EXPANDED GENERATOR** tab and click **Generate** to unlock the full dashboard and download buttons")
+        st.info("👆 Go to the **🧠 EXPANDED GENERATOR** tab and click **Generate** to unlock the dashboard")
 
 st.success("✅ App is now 100% stable with all CSV download buttons!")
